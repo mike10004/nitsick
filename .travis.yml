@@ -3,7 +3,6 @@ jdk: openjdk11
 notifications:
   email: false
 before_install: true
-install: mvn $MAVEN_OPTIONS dependency:go-offline compile test-compile --batch-mode 
+install: mvn --batch-mode $MAVEN_OPTIONS dependency:go-offline compile test-compile 
 before_script: true
-script: mvn $MAVEN_OPTIONS --batch-mode install
-
+script: mvn --batch-mode $MAVEN_OPTIONS install
