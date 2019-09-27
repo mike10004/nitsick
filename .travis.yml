@@ -1,0 +1,9 @@
+language: java
+jdk: openjdk11
+notifications:
+  email: false
+before_install: true
+install: mvn $MAVEN_OPTIONS dependency:go-offline compile test-compile --batch-mode 
+before_script: true
+script: mvn $MAVEN_OPTIONS --batch-mode install
+
