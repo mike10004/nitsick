@@ -2,7 +2,13 @@ language: java
 jdk: openjdk11
 notifications:
   email: false
+cache:
+  directories:
+    - $HOME/.m2
 before_install: true
-install: mvn --batch-mode $MAVEN_OPTIONS dependency:go-offline compile test-compile 
+install:
+  - mvn --batch-mode $MAVEN_OPTIONS dependency:go-offline compile test-compile
 before_script: true
-script: mvn --batch-mode $MAVEN_OPTIONS install
+script:
+  - mvn -B -V $MAVEN_OPTIONS install
+  - mvn -B -V $MAVEN_OPTIONS javadoc:javadoc
