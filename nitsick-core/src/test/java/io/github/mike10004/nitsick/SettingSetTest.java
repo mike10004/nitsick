@@ -65,7 +65,7 @@ public class SettingSetTest {
 
     @Test
     public void get_fallbackToEnvironment() {
-        SettingLayer fakeEnv = new FunctionLayer(Utils.map("A_D_G", "shibboleth")::get, EnvironmentLayer::tranformToEnvironmentVariable);
+        SettingLayer fakeEnv = new KeyTransformingLayer(Utils.map("A_D_G", "shibboleth")::get, EnvironmentLayer::transformToEnvironmentVariables);
         SettingSet s = SettingSet.local("a", sampleLayer(), fakeEnv);
         String actual = s.get("d.g");
         assertEquals("shibboleth", actual);

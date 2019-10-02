@@ -1,15 +1,21 @@
 package io.github.mike10004.nitsick;
 
-class EnvironmentLayer extends FunctionLayer {
+import java.util.function.Function;
+import java.util.stream.Stream;
 
-    private static final EnvironmentLayer INSTANCE = new EnvironmentLayer();
+class EnvironmentLayer extends KeyTransformingLayer {
 
-    EnvironmentLayer() {
-        super(System::getenv, EnvironmentLayer::tranformToEnvironmentVariable);
+    private static final EnvironmentLayer INSTANCE = new EnvironmentLayer(System::getenv);
+
+    public EnvironmentLayer(Function<String, String> getenv) {
+        super(getenv, EnvironmentLayer::transformToEnvironmentVariables);
     }
 
-    public static String tranformToEnvironmentVariable(String systemPropertyName) {
-        return CharMatchers.dot().replaceFrom(systemPropertyName, '_').toUpperCase();
+    public static Stream<String> transformToEnvironmentVariables(String systemPropertyName) {
+        systemPropertyName = CharMatchers.dot().trimFrom(systemPropertyName);
+        String primary = CharMatchers.dot().replaceFrom(systemPropertyName, '_').toUpperCase();
+        primary = CharMatchers.usEnglishAlphanumericOrUnderscore().negate().removeFrom(primary);
+        return Stream.of(primary);
     }
 
     public static SettingLayer getInstance() {

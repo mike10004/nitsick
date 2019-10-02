@@ -1,13 +1,11 @@
 package io.github.mike10004.nitsick;
 
-import java.util.function.Function;
-
-class SyspropsLayer extends FunctionLayer {
+class SyspropsLayer extends KeyTransformingLayer {
 
     private static final SyspropsLayer INSTANCE = new SyspropsLayer();
 
     private SyspropsLayer() {
-        super(System::getProperty, Function.identity());
+        super(System::getProperty, identityKeyTransform());
     }
 
     public static SettingLayer getInstance() {

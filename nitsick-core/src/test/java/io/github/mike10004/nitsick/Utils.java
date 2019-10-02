@@ -15,6 +15,6 @@ public class Utils {
     }
 
     public static SettingLayer layer(String...keyValuePairs) {
-        return FunctionLayer.identityKey(map(keyValuePairs)::get);
+        return KeyTransformingLayer.withIdentityKey(map(keyValuePairs)::get);
     }
 }
