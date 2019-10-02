@@ -1,9 +1,18 @@
 package io.github.mike10004.nitsick;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.text.StringEscapeUtils;
 import org.junit.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -63,5 +72,33 @@ public class DurationsTest {
         public String toString() {
             return String.format("TestCase{input=\"%s\",expected=%s}", StringEscapeUtils.escapeJava(input), expected);
         }
+    }
+
+    @Test
+    public void parseUnit() {
+        List<Triple<String, TimeUnit, TimeUnit>> testCases = new ArrayList<>();
+        testCases.add(Triple.of("", null, null));
+        testCases.add(Triple.of(null, null, null));
+        testCases.add(Triple.of("ms", null, TimeUnit.MILLISECONDS));
+        testCases.add(Triple.of("millis", null, TimeUnit.MILLISECONDS));
+        testCases.add(Triple.of("milliseconds", null, TimeUnit.MILLISECONDS));
+        testCases.add(Triple.of("s", null, TimeUnit.SECONDS));
+        testCases.add(Triple.of("sec", null, TimeUnit.SECONDS));
+        testCases.add(Triple.of("secs", null, TimeUnit.SECONDS));
+        testCases.add(Triple.of("seconds", null, TimeUnit.SECONDS));
+        testCases.add(Triple.of("m", null, TimeUnit.MINUTES));
+        testCases.add(Triple.of("min", null, TimeUnit.MINUTES));
+        testCases.add(Triple.of("minutes", null, TimeUnit.MINUTES));
+        List<Object> failures = new ArrayList<>();
+        for (Triple<String, TimeUnit, TimeUnit> testCase : testCases) {
+            String token = testCase.getLeft();
+            TimeUnit df = testCase.getMiddle();
+            TimeUnit expected = testCase.getRight();
+            TimeUnit actual = Durations.parseUnit(token, df);
+            if (!Objects.equals(expected, actual)) {
+                failures.add(Arrays.asList(token, df, expected, actual));
+            }
+        }
+        assertEquals("failures", Collections.emptyList(), failures);
     }
 }

@@ -6,9 +6,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Set of constants corresponding to standard timeout settings.
+ */
 public enum StandardTimeout implements TimeoutSetting {
 
-    SHORT(500), MEDIUM(5 * 1000), LONG(30 * 1000);
+    /**
+     * Short timeout (500 milliseconds).
+     */
+    SHORT(500),
+
+    /**
+     * Medium timeout (5 seconds).
+     */
+    MEDIUM(5 * 1000),
+
+    /**
+     * Long timeout (30 seconds).
+     */
+    LONG(30 * 1000);
 
     private final Duration defaultValue;
     private final List<String> aliases;
