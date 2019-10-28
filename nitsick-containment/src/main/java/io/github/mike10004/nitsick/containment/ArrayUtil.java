@@ -1,0 +1,13 @@
+package io.github.mike10004.nitsick.containment;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
+class ArrayUtil {
+
+    private ArrayUtil() {}
+
+    public static String[] prepend(String[] array, String item) {
+        return Iterables.toArray(Lists.asList(item, array), String.class);
+    }
+}
