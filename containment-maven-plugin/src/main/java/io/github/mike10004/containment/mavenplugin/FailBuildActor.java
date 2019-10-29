@@ -14,7 +14,14 @@ class FailBuildActor extends AbsentImageActorBase {
 
     @Override
     public void perform(RequireImageParametry parametry, @Nullable String directiveParameter) throws MojoExecutionException, DockerException {
-        throw new MojoExecutionException(String.format("failing build as directed because image '%s' is absent", parametry.name));
+        throw new RequiredImageAbsentException(String.format("failing build as directed because image '%s' is absent", parametry.name));
+    }
+
+    static class RequiredImageAbsentException extends MojoExecutionException {
+
+        public RequiredImageAbsentException(String message) {
+            super(message);
+        }
     }
 
 }
