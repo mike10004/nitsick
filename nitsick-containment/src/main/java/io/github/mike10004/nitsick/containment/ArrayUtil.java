@@ -10,4 +10,8 @@ class ArrayUtil {
     public static String[] prepend(String[] array, String item) {
         return Iterables.toArray(Lists.asList(item, array), String.class);
     }
+
+    public static String[] nullToEmpty(String[] array) {
+        return array == null ? new String[0] : array;
+    }
 }
