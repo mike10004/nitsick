@@ -29,7 +29,17 @@ public class RequireImageMojo extends AbstractMojo
     private String name;
 
     /**
-     * Action to perform if the image is not present locally.
+     * Action to perform if the image is not present locally. Valid values are
+     * <ul>
+     *     <li>{@code fail} to fail the Maven build</li>
+     *     <li>{@code ignore} to allow the Maven build to continue</li>
+     *     <li>{@code build[:/path/to/directoryWithDockerfile]} to build the image from the dockerfile
+     *         contained in the directory whose pathname is specified; if no pathname is specified,
+     *         then <code>${project.basedir}/src/test/docker</code> is assumed</li>
+     *     <li>{@code pull[:IMAGE_NAME]} to pull the image whose name is specified,
+     *     where {@code IMAGE_NAME} is in {@code name[:tag]} format; if no image name is specified,
+     *     then the image specified by the {@code name} parameter is used</li>
+     * </ul>
      */
     @Parameter
     private String absentImageAction;
@@ -58,12 +68,16 @@ public class RequireImageMojo extends AbstractMojo
 
     /**
      * Timeout for an image build operation, if one is necessary.
+     * Syntax is human readable, but integer numbers are required.
+     * Values such as {@code 5min}, {@code 30 seconds}, or {@code 90000ms} are allowed.
      */
     @Parameter
     private String buildTimeout;
 
     /**
      * Timeout for an image pull operation, if one is necessary.
+     * Syntax is human readable, but integer numbers are required.
+     * Values such as {@code 5min}, {@code 30 seconds}, or {@code 90000ms} are allowed.
      */
     @Parameter
     private String pullTimeout;
