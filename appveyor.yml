@@ -6,4 +6,4 @@ build_script:
 
     mvn --version
 
-    mvn --quiet --batch-mode install 
+    mvn %MORE_MAVEN_OPTS% --batch-mode -P skip-containment-tests install 
