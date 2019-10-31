@@ -2,6 +2,7 @@ package io.github.mike10004.nitsick;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -19,30 +20,28 @@ import java.util.stream.Stream;
 public interface SettingSet {
 
     /**
-     * Parses a value from this setting set.
+     * Parses a value from this setting set. An empty string as a value
+     * is interpreted to mean the setting is not defined.
      * @param identifierAliases one or more identifiers
      * @param parser value parser
      * @param valueIfUndefined value to return if setting is not defined
      * @param <T> type of the parsed value
      * @return the parsed value
      */
-    default <T> T getTyped(Stream<String> identifierAliases, Function<? super String, ? extends T> parser, @Nullable T valueIfUndefined) {
-        String token = get(identifierAliases);
-        if (token != null && !token.isEmpty()) {
-            return parser.apply(token);
-        }
-        return valueIfUndefined;
+    default <T, U extends T> T getTyped(Stream<String> identifierAliases, Function<? super String, U> parser, @Nullable U valueIfUndefined) {
+        return getOpt(identifierAliases).map(Strings::emptyToNull).map(parser).orElse(valueIfUndefined);
     }
 
     /**
-     * Parses a value from this setting set.
+     * Parses a value from this setting set. An empty string as a value
+     * is interpreted to mean the setting is not defined.
      * @param identifier the identifier
      * @param parser the parser
      * @param valueIfUndefined value to return if setting is not defined
      * @param <T> type of the parsed value
      * @return the parsed value
      */
-    default <T> T getTyped(String identifier, Function<? super String, ? extends T> parser, @Nullable T valueIfUndefined) {
+    default <T, U extends T> T getTyped(String identifier, Function<? super String, U> parser, @Nullable U valueIfUndefined) {
         return getTyped(Stream.of(identifier), parser, valueIfUndefined);
     }
 
@@ -68,10 +67,31 @@ public interface SettingSet {
     }
 
     /**
+     * Gets an optional that represents the value of the setting.
+     * An empty optional means the setting is not defined.
+     * @param identifier the identifier
+     * @return an optional containing the value of the setting if it is defined
+     */
+    default Optional<String> getOpt(String identifier) {
+        return Optional.ofNullable(get(identifier));
+    }
+
+    /**
+     * Gets an optional that represents the value of the setting.
+     * An empty optional means the setting is not defined.
+     * @param identifiers identifier aliases
+     * @return an optional containing the value of the setting if it is defined
+     */
+    default Optional<String> getOpt(Stream<String> identifiers) {
+        return Optional.ofNullable(get(identifiers));
+    }
+
+    /**
      * Gets the value of a setting.
      * @param identifier the identifier
      * @return the value of the setting, or null if not defined
      */
+    @Nullable
     default String get(String identifier) {
         return get(Stream.of(identifier));
     }
@@ -81,6 +101,7 @@ public interface SettingSet {
      * @param identifierAliases one or more identifiers under which the setting is defined
      * @return the value of the setting
      */
+    @Nullable
     String get(Stream<String> identifierAliases);
 
     /**

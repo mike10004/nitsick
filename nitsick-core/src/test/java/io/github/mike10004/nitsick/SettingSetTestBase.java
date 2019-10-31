@@ -16,6 +16,7 @@ public class SettingSetTestBase {
                 "a.c", "20",
                 "a.bool", "true",
                 "a.ya", "yes",
+                "a.empty", "",
                 "a.r2d2", "1",
                 "a.c3p0", "0",
                 "a.d.e", "hello",

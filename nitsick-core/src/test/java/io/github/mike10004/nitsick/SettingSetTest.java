@@ -3,6 +3,7 @@ package io.github.mike10004.nitsick;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
@@ -56,4 +57,20 @@ public class SettingSetTest extends SettingSetTestBase {
         assertNull(s.get(Stream.of("j", "k", "l")));
     }
 
+    @Test
+    public void getTyped_empty() {
+        SettingSet s = sample();
+        int val = s.getTyped("c.empty", Integer::parseInt, -1);
+        assertEquals(-1, val);
+    }
+
+    @Test
+    public void getOpt() {
+        SettingSet s = sample();
+        Optional<String> opt = s.getOpt("g");
+        assertFalse(opt.isPresent());
+        opt = s.getOpt("d.e");
+        assertEquals("hello", opt.orElse(null));
+        assertEquals(Integer.valueOf(10), s.getOpt("b").map(Integer::parseInt).orElse(null));
+    }
 }
