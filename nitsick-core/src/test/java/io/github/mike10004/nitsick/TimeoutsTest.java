@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 public class TimeoutsTest {
 
-    private SettingSet s = SettingSet.local("a", Utils.layer(
+    private SettingSet s = LayeredSettingSet.of("a", Utils.layer(
             "a.timeout.short", "200ms",
             "a.timeout.medium", "12sec",
             "a.timeout.custom", "4292millis",

@@ -7,15 +7,8 @@ import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
-public class SettingSetTest {
-
-    @Test
-    public void toKey() {
-        String actual = SettingSet.local("a", SyspropsLayer.getInstance()).toKey("b", "c");
-        assertEquals("a.b.c", actual);
-    }
-
-    private static final BigInteger EXAMPLE_BIGINT = new BigInteger("1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+@SuppressWarnings("SimplifiableJUnitAssertion")
+public class SettingSetTest extends SettingSetTestBase {
 
     @Test
     public void getTyped() {
@@ -61,34 +54,6 @@ public class SettingSetTest {
         SettingSet s = sample();
         assertEquals("hello", s.get(Stream.of("d.d", "d.e", "d.f")));
         assertNull(s.get(Stream.of("j", "k", "l")));
-    }
-
-    @Test
-    public void get_fallbackToEnvironment() {
-        SettingLayer fakeEnv = new KeyTransformingLayer(Utils.map("A_D_G", "shibboleth")::get, EnvironmentLayer::transformToEnvironmentVariables);
-        SettingSet s = SettingSet.local("a", sampleLayer(), fakeEnv);
-        String actual = s.get("d.g");
-        assertEquals("shibboleth", actual);
-    }
-
-    private static SettingSet sample() {
-        return SettingSet.local("a", sampleLayer());
-    }
-
-    private static SettingLayer sampleLayer() {
-        String[] pairs = {
-                "a.b", "10",
-                "a.c", "20",
-                "a.bool", "true",
-                "a.ya", "yes",
-                "a.r2d2", "1",
-                "a.c3p0", "0",
-                "a.d.e", "hello",
-                "a.d.f", "world",
-                "a.d.x", "z",
-                "a.e.bigint", EXAMPLE_BIGINT.toString(),
-        };
-        return Utils.layer(pairs);
     }
 
 }
