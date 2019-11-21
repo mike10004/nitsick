@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class Utils {
 
-
     public static Map<String, String> map(String...keyValuePairs) {
         Map<String, String> m = new HashMap<>();
         for (int i = 0; i < keyValuePairs.length; i += 2) {
@@ -15,6 +14,6 @@ public class Utils {
     }
 
     public static SettingLayer layer(String...keyValuePairs) {
-        return KeyTransformingLayer.withIdentityKey(map(keyValuePairs)::get);
+        return new ForwardingLayer(map(keyValuePairs)::get);
     }
 }

@@ -9,10 +9,9 @@ import static java.util.Objects.requireNonNull;
 /**
  * Setting layer that transforms keys before applying an underlying function.
  */
-public class KeyTransformingLayer implements SettingLayer {
+public class KeyTransformingLayer extends ForwardingLayer {
 
     private final Function<String, Stream<String>> keyTransform;
-    private final Function<String, String> getter;
 
     /**
      *
@@ -20,8 +19,8 @@ public class KeyTransformingLayer implements SettingLayer {
      * @param keyTransform the key transform
      */
     public KeyTransformingLayer(Function<String, String> getter, Function<String, Stream<String>> keyTransform) {
+        super(getter);
         this.keyTransform = requireNonNull(keyTransform);
-        this.getter = requireNonNull(getter);
     }
 
     /**
@@ -33,26 +32,10 @@ public class KeyTransformingLayer implements SettingLayer {
     @Override
     public String apply(String key) {
         Stream<String> transformedKeys = keyTransform.apply(key);
-        return transformedKeys.map(getter)
+        return transformedKeys.map(super::apply)
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(null);
     }
 
-    /**
-     * Returns a key transform that makes no change.
-     * @return a key transform
-     */
-    public static Function<String, Stream<String>> identityKeyTransform() {
-        return Stream::of;
-    }
-
-    /**
-     * Creates an instance with the identity key transform and the given underlying function.
-     * @param settingGetter the underlying function
-     * @return a new instance
-     */
-    public static KeyTransformingLayer withIdentityKey(Function<String, String> settingGetter) {
-        return new KeyTransformingLayer(settingGetter, identityKeyTransform());
-    }
 }

@@ -121,21 +121,11 @@ public interface SettingSet {
      * @param domain the settings domain
      * @return a new setting set instance
      */
-    @SuppressWarnings("unused") // unused in this project because only local instance are used for testing
+    @SuppressWarnings("unused") // unused in this project because only local instances are used for testing
     static SettingSet system(String domain) {
-        List<SettingLayer> layers = Lists.asList(SyspropsLayer.getInstance(), EnvironmentLayer.getInstance());
+        List<SettingLayer> layers = Lists.asList(SettingLayer.systemPropertiesLayer(), SettingLayer.environmentLayer());
         return new LayeredSettingSet(domain, layers);
     }
 
-    /**
-     * Returns a setting set representing the system settings.
-     * Deprecated alias of {@link #system(String)}.
-     * @see #system(String)
-     * @deprecated use the more-aptly named {@link #system(String)}
-     */
-    @Deprecated
-    static SettingSet global(String domain) {
-        return system(domain);
-    }
 }
 
